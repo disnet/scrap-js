@@ -1,0 +1,21 @@
+{
+  "name": "@scrap-js/scrap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/scrap.mjs",
+  "type": "module",
+  "scripts": {
+    "test": "ava"
+  },
+  "author": "Tim Disney",
+  "license": "MIT",
+  "dependencies": {
+    "ava": "^3.8.0",
+    "parser-lang": "^0.3.0"
+  },
+  "ava": {
+    "files": [
+      "test/**/*"
+    ]
+  }
+}
