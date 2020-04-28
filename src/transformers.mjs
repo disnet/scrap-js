@@ -56,7 +56,7 @@ export function reduceBottomUpC(empty, concat) {
 }
 
 export function reduceSum(x, ...fs) {
-  return reduceBottomUpC('', (l, r) => l + r)(...fs)(x);
+  return reduceBottomUpC(0, (l, r) => l + r)(...fs)(x);
 }
 
 export function reduceConcat(x, ...fs) {

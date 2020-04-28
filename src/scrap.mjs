@@ -18,7 +18,7 @@ function resolveMixins(rawBindings, bindingMap) {
         console.dir(b);
         throw new Error(`Cannot mix in unknown data '${b.name}'`);
       }
-      return resolveMixins(bindingMap.get(b.name));
+      return resolveMixins(bindingMap.get(b.name), bindingMap);
     }
     return [b];
   });

@@ -246,11 +246,10 @@ test('reduceSum works', t => {
 
   let r = reduceSum(
     a,
-    A.case(({ a, b }) => a),
-    B.case(({ b }) => b)
+    B.case(({ b }) => 1)
   );
 
-  t.is(r, 'ab');
+  t.is(r, 1);
 });
 
 test('reduceConcat works', t => {
@@ -288,4 +287,48 @@ test('mixins work', t => {
 
     t.snapshot(B('a', 'b'));
   }
+});
+
+test('the html example works', t => {
+  let { Text, Attr, Html, Head, Title, Script, Body, Div, P, A } = data`
+data Node { children: [Node] }
+data Element { attrs: [Attr], ...Node }
+
+data Attr { name: string, value: string }
+
+data Text { content: string, ...Node }
+
+data Html { ...Element }
+data Head { ...Element }
+data Title { ...Element }
+data Script { ...Element }
+data Body { ...Element }
+data Div { ...Element }
+data A { ...Element }
+data P { ...Element }
+`;
+
+  let example = Html([], [
+    Head([], [
+      Title([], [Text('Example Page', [])])]),
+    Body([], [
+      Div([Attr('class', 'content')], [
+        P([], [
+          Text('This is a very fine paragraph with a ', []),
+          A([Attr('href', 'https://example.com')], [
+            Text('link', [])])]),
+        P([], [
+          Text('another fine paragraph', []),
+          A([Attr('href', 'https://example.com')], [
+            Text('link', [])])]),
+      ]),
+    ]),
+  ]);
+
+  t.snapshot(example);
+
+  let numberOfLinks = reduceSum(example,
+                                A.case(() => 1));
+  t.is(numberOfLinks, 2);
+
 });
