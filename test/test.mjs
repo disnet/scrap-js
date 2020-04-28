@@ -315,11 +315,11 @@ data P { ...Element }
       Div([Attr('class', 'content')], [
         P([], [
           Text('This is a very fine paragraph with a ', []),
-          A([Attr('href', 'https://example.com')], [
+          A([Attr('href', 'http://example.com')], [
             Text('link', [])])]),
         P([], [
           Text('another fine paragraph', []),
-          A([Attr('href', 'https://example.com')], [
+          A([Attr('href', 'http://example.com')], [
             Text('link', [])])]),
       ]),
     ]),
@@ -330,5 +330,10 @@ data P { ...Element }
   let numberOfLinks = reduceSum(example,
                                 A.case(() => 1));
   t.is(numberOfLinks, 2);
+
+  t.snapshot(reconstruct(example,
+                         Attr.match(a => a.name === 'href' && a.value.startsWith('http:')
+                                    ? Attr('href', `https:${a.value.slice(5)}`)
+                                    : a)));
 
 });

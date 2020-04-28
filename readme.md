@@ -3,10 +3,7 @@
 Scrap.js let's you declaratively define data types that come with rich manipulation and traversal functionality built right in with no boilerplate.
 
 ```js
-import scrap from '@scrap-js/scrap';
-import { reduceSum } from '@scrap-js/scrap/transformers';
-
-let {} = scrap`
+let { Text, Attr, Html, Head, Title, Script, Body, Div, P, A } = data`
 data Node { children: [Node] }
 data Element { attrs: [Attr], ...Node }
 
@@ -25,25 +22,32 @@ data P { ...Element }
 `;
 
 let example = Html([], [
-  Head([], [Title([], [Text('Example Page', [])])]),
+  Head([], [
+    Title([], [Text('Example Page', [])])]),
   Body([], [
     Div([Attr('class', 'content')], [
       P([], [
-      Text('This is a very fine paragraph with a ', []), 
-      A([Attr('href', 'https://example.com')], [Text('link', [])])])
+        Text('This is a very fine paragraph with a ', []),
+        A([Attr('href', 'http://example.com')], [
+          Text('link', [])])]),
+      P([], [
+        Text('another fine paragraph', []),
+        A([Attr('href', 'http://example.com')], [
+          Text('link', [])])]),
     ]),
   ]),
-]));
+]);
 
-let numberOfJunkyards = reduceSum(example,
-  Junkyard.case(({ address, availableScrap }) => 1),
-);
+let httpsLinks = reconstruct(
+  example,
+  Attr.match(a => a.name === 'href' && a.value.startsWith('http:')
+                  ? Attr('href', `https:${a.value.slice(5)}`)
+                  : a)));
 
-let totalScrap = reduceSum(example,
-  Junkyard.case(({ address, availableScrap }) => availableScrap)
-);
+let numberOfLinks = reduceSum(example,
+                              A.case(() => 1));
+// numberOfLinks === 2
 ```
-
 
 Why the name?
 
