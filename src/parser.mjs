@@ -22,7 +22,9 @@ ident = /[a-zA-Z][a-zA-Z0-9]*/ > ${Ident} ;
 
 punc = /[\{\}\[\]:,|]/ > ${Punc} ;
 
-token = ident | punc ;
+ellipses = '...' > ${Punc} ;
+
+token = ident | punc | ellipses ;
 
 tokens = optSp token tokens > ${([, t, ts]) => ([t, ...ts])}
        | optSp empty > ${() => []};
@@ -58,6 +60,11 @@ function UnionType(alternatives) {
     alternatives,
   };
 }
+function Mixin(name) {
+  return {
+    type: 'Mixin', name,
+  };
+}
 
 let { definitions } = lang`
 empty = @${empty()} ;
@@ -67,6 +74,7 @@ optComma = comma  | @${succeed()} ;
 
 colon = !${o => isPunc(o, ':')} ;
 pipe = !${o => isPunc(o, '|')} ;
+ellipses = !${o => isPunc(o, '...')} ;
 
 ident = !${isIdent} ;
 punc = !${isPunc} ;
@@ -87,7 +95,9 @@ unionType = baseType (pipe baseType)+ > ${([t, ts]) => UnionType([t, ...ts.map((
           | baseType
           ;
 
-binding = ident colon unionType > ${([{ name }, , type]) => Binding(name, type)};
+binding = ident colon unionType > ${([{ name }, , type]) => Binding(name, type)}
+        | ellipses ident > ${([, name]) => Mixin(name)}
+        ;
 
 declBody =  binding (comma binding )* optComma > ${([head, tail]) => [head, ...tail.map(([, snd]) => snd)]} ;
 
@@ -105,5 +115,3 @@ function lex(s) {
 export default function parse(s) {
   return definitions.tryParse(lex(s));
 }
-
-

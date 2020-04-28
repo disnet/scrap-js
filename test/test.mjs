@@ -18,6 +18,26 @@ test('basic parsing', t => {
   `));
 });
 
+test('parsing can handle spreading', t => {
+  t.snapshot(parse(`
+data A { a: string }
+data B { ...A }
+`));
+
+  t.snapshot(parse(`
+data A { a: string }
+data B { b: number, ...A }
+`));
+  t.snapshot(parse(`
+data A { a: string }
+data B { b: number, ... A }
+`));
+  t.snapshot(parse(`
+data A { a: string }
+data B { ...A, b: number }
+`));
+});
+
 test('basic data constructing', t => {
   let { A } = data`data A { a: string, b: number }`;
   let a = A('a', 1);
