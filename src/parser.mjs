@@ -96,7 +96,7 @@ unionType = baseType (pipe baseType)+ > ${([t, ts]) => UnionType([t, ...ts.map((
           ;
 
 binding = ident colon unionType > ${([{ name }, , type]) => Binding(name, type)}
-        | ellipses ident > ${([, name]) => Mixin(name)}
+        | ellipses ident > ${([, { name }]) => Mixin(name)}
         ;
 
 declBody =  binding (comma binding )* optComma > ${([head, tail]) => [head, ...tail.map(([, snd]) => snd)]} ;

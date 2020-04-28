@@ -269,3 +269,23 @@ test('reduceConcat works', t => {
 
   t.deepEqual(r, ['a', 'b']);
 });
+
+test('mixins work', t => {
+  {
+    let { A, B } = data`
+  data A { a: string }
+  data B { b: string, ...A }
+  `;
+
+    t.snapshot(B('b', 'a'));
+  }
+
+  {
+    let { A, B } = data`
+  data A { a: string }
+  data B { ...A, b: string }
+  `;
+
+    t.snapshot(B('a', 'b'));
+  }
+});

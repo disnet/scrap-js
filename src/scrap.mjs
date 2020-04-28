@@ -11,8 +11,23 @@ function dataToString(d) {
   return d.toString();
 }
 
-function createDeclaration({ name, bindings }) {
+function resolveMixins(rawBindings, bindingMap) {
+  return rawBindings.flatMap(b => {
+    if (b.type === 'Mixin') {
+      if (!bindingMap.has(b.name)) {
+        console.dir(b);
+        throw new Error(`Cannot mix in unknown data '${b.name}'`);
+      }
+      return resolveMixins(bindingMap.get(b.name));
+    }
+    return [b];
+  });
+}
+
+function createDeclaration({ name, bindings }, bindingMap) {
   let classTag = Symbol(name);
+
+  bindings = resolveMixins(bindings, bindingMap);
 
   let data = class {
 
@@ -42,9 +57,9 @@ function createDeclaration({ name, bindings }) {
     toString() {
       return `data ${name} { ${
         bindings.map(({ name }) => `${name}: ${dataToString(this[name])}`).join(', ')
-      } }` 
+      } }`;
     }
-  }
+  };
 
   let ctor = (...args) => new data(...args);
   ctor.match = guard(
@@ -62,8 +77,10 @@ export default function data(strings) {
   let decls = parse(strings[0]);
   let namespace = {};
 
+  let bindingMap = new Map(decls.map(decl => [decl.name, decl.bindings]));
+
   for (let dataDecl of decls) {
-    let decl = createDeclaration(dataDecl);
+    let decl = createDeclaration(dataDecl, bindingMap);
     namespace[dataDecl.name] = decl;
   }
 
