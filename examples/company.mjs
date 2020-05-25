@@ -1,4 +1,4 @@
-import data from '../src/data.mjs';
+import data from '../src/scrap.mjs';
 import { reconstruct, reduce } from '../src/transformers.mjs';
 
 // example from "Scrap your boilerplate"

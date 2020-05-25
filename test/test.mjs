@@ -289,6 +289,23 @@ test('mixins work', t => {
   }
 });
 
+test('test tree example works', t => {
+  let { Node, Leaf } = data`
+data Node { left: Node | Leaf, right: Node | Leaf }
+data Leaf { data: any }
+`;
+
+  let tree = Node(
+    Node(Leaf(1), Leaf(10)),
+    Leaf(6)
+  );
+
+  let sum = reduceSum(tree,
+                      Leaf.case(({ data }) => data));
+  t.is(sum, 17);
+
+});
+
 test('the html example works', t => {
   let { Text, Attr, Html, Head, Title, Script, Body, Div, P, A } = data`
 data Node { children: [Node] }

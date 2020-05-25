@@ -10,8 +10,10 @@
   "author": "Tim Disney",
   "license": "MIT",
   "dependencies": {
-    "ava": "^3.8.0",
-    "parser-lang": "^0.3.0"
+    "parser-lang": "0.4.0"
+  },
+  "devDependencies": {
+    "ava": "^3.8.0"
   },
   "ava": {
     "files": [

@@ -1,4 +1,4 @@
-import { lang, empty, succeed } from 'parser-lang/main.js';
+import { lang, empty, succeed } from 'parser-lang';
 
 
 function Ident(name) {
