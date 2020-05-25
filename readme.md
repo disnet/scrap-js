@@ -171,7 +171,7 @@ let sum = reduce(tree, 0, (l, r) => l + r,
                 Leaf.case(({ data }) => data));
 ```
 
-The case `Leaf.case(({ data }) => data)` extracts the number from each `Leaf`. Note the type of the `case` function here is `Leaf => number` whereas when `case` is used in `reconstruct` the type is `Leaf => Leaf`. 
+The case `Leaf.case(({ data }) => data)` extracts the number from each `Leaf`. Note the type of the `case` function here is `Leaf -> number` whereas when `case` is used in `reconstruct` the type is `Leaf -> Leaf`. 
 
 The `concat` function is used to combine (sum) results from each `case` and the `empty` value `0` is used as the default (_whispers:_ [monoid](https://en.wikipedia.org/wiki/Monoid)).
 
