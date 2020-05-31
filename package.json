@@ -2,7 +2,11 @@
   "name": "@scrap-js/scrap",
   "version": "1.0.0",
   "description": "A declarative data type construction and manipulation library",
-  "keywords": ["template literals", "data types", "reducers"],
+  "keywords": [
+    "template literals",
+    "data types",
+    "reducers"
+  ],
   "main": "src/scrap.mjs",
   "type": "module",
   "private": false,

@@ -62,6 +62,7 @@ function createDeclaration({ name, bindings }, bindingMap) {
   };
 
   let ctor = (...args) => new data(...args);
+  ctor.is = x => x != null && typeof x[dataTag] === 'function' && x[dataTag]() === classTag;
   ctor.match = guard(
     x => x != null && typeof x[dataTag] === 'function' && x[dataTag]() === classTag,
     r => r != null && typeof r[dataTag] === 'function' && r[dataTag]() === classTag ? true : `Must return a result of type ${name}`

@@ -65,8 +65,16 @@ let p = Pair(1, 2);
 p.left === 1;
 p.right === 2;
 ```
-
 Note that the order of the arguments to the constructor will match the lexical order of fields in the `data` declaration.
+
+You can check if some value was made by a data constructor via the static `is` predicate:
+
+```javascript
+let p = Pair(1, 2);
+
+Pair.is(p) === true;
+Pair.is([1, 2]) === false;
+```
 
 ### Data Types
 
@@ -171,7 +179,7 @@ let sum = reduce(tree, 0, (l, r) => l + r,
                 Leaf.case(({ data }) => data));
 ```
 
-The case `Leaf.case(({ data }) => data)` extracts the number from each `Leaf`. Note the type of the `case` function here is `Leaf -> number` whereas when `case` is used in `reconstruct` the type is `Leaf -> Leaf`. 
+The case `Leaf.case(({ data }) => data)` extracts the number from each `Leaf`. Note the type of the `case` function here is `Leaf -> number` whereas when `case` is used in `reconstruct` the type is `Leaf -> Leaf`.
 
 The `concat` function is used to combine (sum) results from each `case` and the `empty` value `0` is used as the default (_whispers:_ [monoid](https://en.wikipedia.org/wiki/Monoid)).
 

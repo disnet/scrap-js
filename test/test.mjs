@@ -289,6 +289,21 @@ test('mixins work', t => {
   }
 });
 
+test('the is static method works', t => {
+  let { A, B } = data`
+  data A { a: string, b: B }
+  data B { b: string }
+  `;
+
+  let b = B('b');
+  let a = A('a', b);
+
+  t.true(A.is(a));
+  t.false(A.is(b));
+  t.false(A.is(1));
+  t.false(A.is(null));
+});
+
 test('test tree example works', t => {
   let { Node, Leaf } = data`
 data Node { left: Node | Leaf, right: Node | Leaf }
@@ -305,6 +320,7 @@ data Leaf { data: any }
   t.is(sum, 17);
 
 });
+
 
 test('the html example works', t => {
   let { Text, Attr, Html, Head, Title, Script, Body, Div, P, A } = data`
