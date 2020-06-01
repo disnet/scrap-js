@@ -49,8 +49,9 @@ export function reduceBottomUpC(empty, concat) {
   return (...fs) => {
     return x => {
       let bottomArray = x[gmapQ](reduceBottomUpC(empty, concat)(...fs));
-      let levelResult = fs.map(f => f(x, () => empty)).reduce(concat);
-      return bottomArray.reduce(concat, levelResult);
+      let bottomResult = bottomArray.reduce(concat, empty);
+      let levelResult = fs.map(f => f(x, () => empty, bottomResult)).reduce(concat);
+      return concat(levelResult, bottomResult);
     }
   }
 }

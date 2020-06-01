@@ -304,6 +304,22 @@ test('the is static method works', t => {
   t.false(A.is(null));
 });
 
+test('can reduce with state', t => {
+  let { A, B } = data`
+  data A { a: string, b: B }
+  data B { b: string }
+  `;
+
+  let b = B('b');
+  let a = A('a', b);
+
+  let result = reduce(a, '', (l, r) => l + r,
+                      B.case(({ b }) => b),
+                      A.case(({ a, b }, r) => a + r));
+  t.is(result, 'abb');
+
+});
+
 test('test tree example works', t => {
   let { Node, Leaf } = data`
 data Node { left: Node | Leaf, right: Node | Leaf }

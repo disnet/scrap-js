@@ -2,9 +2,9 @@ const id = x => x;
 
 export function guard(domainPredicate, rangePredicate) {
   return f => {
-    return (x, def = id) => {
+    return (x, def = id, state) => {
       if (domainPredicate(x)) {
-        let range = f(x);
+        let range = f(x, state);
         if (typeof rangePredicate === 'function') {
           let message = rangePredicate(range);
           if (message !== true) {
@@ -22,7 +22,7 @@ export function guard(domainPredicate, rangePredicate) {
 const empty = {};
 export default function switchOn(...matchers) {
   if (matchers.length === 0) throw new Error('Must provide matchers');
-  
+
   return x => {
     for (let matcher of matchers) {
       let r = matcher(x, () => empty);
