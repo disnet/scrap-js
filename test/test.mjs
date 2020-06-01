@@ -315,8 +315,25 @@ test('can reduce with state', t => {
 
   let result = reduce(a, '', (l, r) => l + r,
                       B.case(({ b }) => b),
-                      A.case(({ a, b }, r) => a + r));
+                      A.case(({ a, b }, [ar, br]) => a + br ));
   t.is(result, 'ab');
+
+});
+
+test('can reduce with array ', t => {
+  let { A, B, Top } = data`
+  data A { a: string }
+  data B { b: string }
+  data Top { a: [A], b: [B] }
+  `;
+
+  let top = Top([A('a'), A('aa'), A('aaa')], [B('b'), B('bb'), B('bbb')]);
+
+  let result = reduce(top, 0, (l, r) => l + r,
+                      B.case(({ b }) => b.length),
+                      A.case(({ a }) => a.length),
+                      Top.case(({ a, b }, [as, bs]) => as + bs));
+  t.is(result, 12);
 
 });
 

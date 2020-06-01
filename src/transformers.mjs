@@ -51,7 +51,7 @@ export function reduceBottomUpC(empty, concat) {
       let bottomArray = x[gmapQ](reduceBottomUpC(empty, concat)(...fs));
       let bottomResult = bottomArray.reduce(concat, empty);
       for (let f of fs) {
-        let r = f(x, () => EMPTY, bottomResult);
+        let r = f(x, () => EMPTY, bottomArray);
         if (r !== EMPTY) {
           return r;
         }
