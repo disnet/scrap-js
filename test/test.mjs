@@ -233,7 +233,7 @@ test('reduce works', t => {
     B.case(({ b }) => b)
   );
 
-  t.is(r, 'ab');
+  t.is(r, 'a');
 });
 
 test('reduceSum works', t => {
@@ -266,7 +266,7 @@ test('reduceConcat works', t => {
     B.case(({ b }) => [b])
   );
 
-  t.deepEqual(r, ['a', 'b']);
+  t.deepEqual(r, ['a']);
 });
 
 test('mixins work', t => {
@@ -316,7 +316,7 @@ test('can reduce with state', t => {
   let result = reduce(a, '', (l, r) => l + r,
                       B.case(({ b }) => b),
                       A.case(({ a, b }, r) => a + r));
-  t.is(result, 'abb');
+  t.is(result, 'ab');
 
 });
 
