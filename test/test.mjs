@@ -315,7 +315,7 @@ test('can reduce with state', t => {
 
   let result = reduce(a, '', (l, r) => l + r,
                       B.case(({ b }) => b),
-                      A.case(({ a, b }, [ar, br]) => a + br ));
+                      A.case((node, state) => node.a + state.b ));
   t.is(result, 'ab');
 
 });
@@ -332,7 +332,7 @@ test('can reduce with array ', t => {
   let result = reduce(top, 0, (l, r) => l + r,
                       B.case(({ b }) => b.length),
                       A.case(({ a }) => a.length),
-                      Top.case(({ a, b }, [as, bs]) => as + bs));
+                      Top.case((node, { a, b }) => a + b));
   t.is(result, 12);
 
 });

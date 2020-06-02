@@ -4,6 +4,7 @@ const EMPTY = {};
 
 export function reconstructBottomUpC(...fs) {
   return x => {
+    if (typeof x[gmapT] !== 'function') throw new Error(`Unsupported value missing definition for gmapT protocol: ${x}`);
     // first go down the tree
     let arg = x[gmapT](reconstructBottomUpC(...fs));
     // then try each reconstructing function in tern. Return the first one
@@ -30,6 +31,7 @@ export function reconstructTopDownC(...fs) {
         break;
       }
     }
+    if (typeof toUse[gmapT] !== 'function') throw new Error(`Unsupported value missing definition for gmapT protocol: ${x}`);
     return toUse[gmapT](reconstructTopDownC(...fs));
   }
 }
@@ -48,17 +50,18 @@ export function reconstruct(x, ...fs) {
 export function reduceBottomUpC(empty, concat) {
   return (...fs) => {
     return x => {
-      let bottomArray = x[gmapQ](reduceBottomUpC(empty, concat)(...fs));
-      let bottomResult = bottomArray.reduce(concat, empty);
+      if (typeof x[gmapQ] !== 'function') throw new Error(`Unsupported value missing definition for gmapQ protocol: ${x}`);
+      let bottomMap = x[gmapQ](reduceBottomUpC(empty, concat)(...fs));
+      let bottomResult = Object.values(bottomMap).reduce(concat, empty);
       for (let f of fs) {
-        let r = f(x, () => EMPTY, bottomArray);
+        let r = f(x, () => EMPTY, bottomMap);
         if (r !== EMPTY) {
           return r;
         }
       }
       return bottomResult;
-    }
-  }
+    };
+  };
 }
 
 export function reduceSum(x, ...fs) {

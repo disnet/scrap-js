@@ -47,7 +47,11 @@ function createDeclaration({ name, bindings }, bindingMap) {
     }
 
     [gmapQ](f) {
-      return bindings.map(({ name }) => f(this[name]));
+      let o = Object.create(null);
+      for (let { name } of bindings) {
+        o[name] = f(this[name]);
+      }
+      return o;
     }
 
     [dataTag]() {
